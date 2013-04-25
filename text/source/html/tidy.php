@@ -1,6 +1,9 @@
 <?php
 
 
+namespace Components;
+
+
   /**
    * Text_Html_Tidy
    *
@@ -30,7 +33,7 @@
     // CONSTRUCTION
     public function __construct($html_, Io_Charset $charset_)
     {
-      $this->m_tidy=new tidy();
+      $this->m_tidy=new \tidy();
 
       //$this->m_html=$html_;
       $this->m_html=file_get_contents(__DIR__.'/test.html');
@@ -73,7 +76,7 @@
      */
     private $m_charset;
     /**
-     * @var tidy
+     * @var \tidy
      */
     private $m_tidy;
     //--------------------------------------------------------------------------
@@ -91,7 +94,7 @@
   class Text_Html_Tidy_Node
   {
     // CONSTRUCTION
-    public function __construct(Text_Html_Tidy $tidy_, tidyNode $node_)
+    public function __construct(Text_Html_Tidy $tidy_, \tidyNode $node_)
     {
       $this->m_tidy=$tidy_;
       $this->m_node=$node_;
@@ -123,7 +126,7 @@
      */
     private $m_tidy;
     /**
-     * @var tidyNode
+     * @var \tidyNode
      */
     private $m_node;
     //--------------------------------------------------------------------------

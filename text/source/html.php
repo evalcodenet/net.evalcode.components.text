@@ -1,6 +1,9 @@
 <?php
 
 
+namespace Components;
+
+
   /**
    * Text_Html
    *
@@ -40,7 +43,7 @@
 
       $html=html_entity_decode($this->m_html, ENT_QUOTES, $this->m_charset->name());
 
-      $tidy=new tidy();
+      $tidy=new \tidy();
       $tidy->parseString($html, array(
         'char-encoding'=>$this->m_charset->name(),
         'input-encoding'=>$this->m_charset->name(),
@@ -81,7 +84,7 @@
     //-----
 
 
-    protected function nodeToPlainText(tidyNode $node_, &$output_)
+    protected function nodeToPlainText(\tidyNode $node_, &$output_)
     {
       if($node_->isComment())
         return;
@@ -97,7 +100,7 @@
       }
     }
 
-    protected function nodeAnchorToPlainText(tidyNode $node_, &$output_)
+    protected function nodeAnchorToPlainText(\tidyNode $node_, &$output_)
     {
       if(isset($node_->child) && is_array($node_->child))
       {
@@ -111,7 +114,7 @@
       }
     }
 
-    protected function nodeHeadline1ToPlainText(tidyNode $node_, &$output_)
+    protected function nodeHeadline1ToPlainText(\tidyNode $node_, &$output_)
     {
       if(isset($node_->child) && is_array($node_->child))
       {
@@ -123,7 +126,7 @@
       }
     }
 
-    protected function nodeHeadline2ToPlainText(tidyNode $node_, &$output_)
+    protected function nodeHeadline2ToPlainText(\tidyNode $node_, &$output_)
     {
       if(isset($node_->child) && is_array($node_->child))
       {
@@ -135,7 +138,7 @@
       }
     }
 
-    protected function nodeHeadline3ToPlainText(tidyNode $node_, &$output_)
+    protected function nodeHeadline3ToPlainText(\tidyNode $node_, &$output_)
     {
       if(isset($node_->child) && is_array($node_->child))
       {
@@ -147,12 +150,12 @@
       }
     }
 
-    protected function nodeLinebreakToPlainText(tidyNode $node_, &$output_)
+    protected function nodeLinebreakToPlainText(\tidyNode $node_, &$output_)
     {
       $output_.=$this->linebreakCharacter;
     }
 
-    protected function nodeParagraphToPlainText(tidyNode $node_, &$output_)
+    protected function nodeParagraphToPlainText(\tidyNode $node_, &$output_)
     {
       if(isset($node_->child) && is_array($node_->child))
       {
@@ -164,12 +167,12 @@
       }
     }
 
-    protected function nodeTextToPlainText(tidyNode $node_, &$output_)
+    protected function nodeTextToPlainText(\tidyNode $node_, &$output_)
     {
       $output_.=$node_->value;
     }
 
-    protected function nodeTableToPlainText(tidyNode $node_, &$output_)
+    protected function nodeTableToPlainText(\tidyNode $node_, &$output_)
     {
       $output_.=$this->linebreakCharacter;
 
@@ -180,7 +183,7 @@
       }
     }
 
-    protected function nodeTableRowToPlainText(tidyNode $node_, &$output_)
+    protected function nodeTableRowToPlainText(\tidyNode $node_, &$output_)
     {
       $columns=count($node_->child);
       $cellWidth=round($this->width/$columns, 0);
