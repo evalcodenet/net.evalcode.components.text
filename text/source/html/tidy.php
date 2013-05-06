@@ -42,7 +42,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     public function parse()
     {
       $charset=strtolower(str_replace(array('-', '_'), null, $this->m_charset->name()));
@@ -102,7 +102,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     public function getTag()
     {
       return $this->m_node->name;
