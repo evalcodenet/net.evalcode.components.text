@@ -35,8 +35,7 @@ namespace Components;
     {
       $this->m_tidy=new \tidy();
 
-      //$this->m_html=$html_;
-      $this->m_html=file_get_contents(__DIR__.'/test.html');
+      $this->m_html=$html_;
       $this->m_charset=$charset_;
     }
     //--------------------------------------------------------------------------
@@ -60,8 +59,6 @@ namespace Components;
 
       $matches=array();
       preg_match_all('/^(?:line (\d+) column (\d+) - )?(\S+): (?:\[((?:\d+\.?){4})]:)?(.*?)$/m', $errors, $matches, PREG_SET_ORDER);
-
-      var_dump($matches);
     }
     //--------------------------------------------------------------------------
 
