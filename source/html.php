@@ -12,7 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Text_Html
+  class Text_Html implements Object, Value_String
   {
     // PROPERTIES
     public $width=40;
@@ -24,10 +24,26 @@ namespace Components;
 
 
     // CONSTRUCTION
-    public function __construct($html_, Io_Charset $charset_)
+      public function __construct($value_, Io_Charset $charset_=null)
     {
-      $this->m_html=$html_;
+      if(null===$charset_)
+        $charset_=Io_Charset::UTF_8();
+
+      $this->m_value=$value_;
       $this->m_charset=$charset_;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // STATIC ACCESSORS
+    /**
+     * @param string $html_
+     *
+     * @return \Components\Text_Html
+     */
+    public static function valueOf($html_)
+    {
+      return new self($html_);
     }
     //--------------------------------------------------------------------------
 
@@ -41,7 +57,7 @@ namespace Components;
       if(null===$outputCharset_)
         $outputCharset_=$this->m_charset;
 
-      $html=html_entity_decode($this->m_html, ENT_QUOTES, $this->m_charset->name());
+      $html=html_entity_decode($this->m_value, ENT_QUOTES, $this->m_charset->name());
 
       $tidy=new \tidy();
       $tidy->parseString($html, array(
@@ -58,8 +74,50 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
+    // OVERRIDES/IMPLEMENTS
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Value_String::value()
+     */
+    public function value()
+    {
+      return $this->m_value;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::hashCode()
+     */
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::equals()
+     */
+    public function equals($object_)
+    {
+      if($object_ instanceof self)
+        return String::equal($this->m_value, $object_->m_value);
+
+      return false;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::__toString()
+     */
+    public function __toString()
+    {
+      return $this->m_value;
+    }
+    //--------------------------------------------------------------------------
+
+
     // IMPLEMENTATION
-    protected $m_htmlNodeConverters=array(
+    protected $m_tagConverters=array(
       ''=>'nodeTextToPlainText',
       'a'=>'nodeAnchorToPlainText',
       'br'=>'nodeLinebreakToPlainText',
@@ -76,7 +134,7 @@ namespace Components;
     /**
      * @var string
      */
-    protected $m_html;
+    protected $m_value;
     /**
      * @var Io_Charset
      */
@@ -89,9 +147,9 @@ namespace Components;
       if($node_->isComment())
         return;
 
-      if(isset($this->m_htmlNodeConverters[$node_->name]))
+      if(isset($this->m_tagConverters[$node_->name]))
       {
-        $this->{$this->m_htmlNodeConverters[$node_->name]}($node_, $output_);
+        $this->{$this->m_tagConverters[$node_->name]}($node_, $output_);
       }
       else if($node_->hasChildren())
       {
