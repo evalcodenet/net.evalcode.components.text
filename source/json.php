@@ -60,7 +60,7 @@ namespace Components;
      *
      * @return string
      */
-    public function encode($options_=self::JSON_DEFAULT, Io_Charset $outputCharset_=null)
+    public function get($options_=self::JSON_DEFAULT, Io_Charset $outputCharset_=null)
     {
       $value=$this->m_value;
 
