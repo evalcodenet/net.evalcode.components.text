@@ -7,8 +7,9 @@ namespace Components;
   /**
    * Text_Html_Tidy
    *
-   * @package net.evalcode.components
-   * @subpackage text.html
+   * @api
+   * @package net.evalcode.components.text
+   * @subpackage html
    *
    * @author evalcode.net
    */
@@ -69,7 +70,7 @@ namespace Components;
      */
     private $m_html;
     /**
-     * @var Io_Charset
+     * @var \Components\Io_Charset
      */
     private $m_charset;
     /**
@@ -83,8 +84,8 @@ namespace Components;
   /**
    * Text_Html_Tidy_Node
    *
-   * @package net.evalcode.components
-   * @subpackage text.html
+   * @package net.evalcode.components.text
+   * @subpackage html
    *
    * @author evalcode.net
    */
@@ -119,7 +120,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var Text_Html_Tidy
+     * @var \Components\Text_Html_Tidy
      */
     private $m_tidy;
     /**

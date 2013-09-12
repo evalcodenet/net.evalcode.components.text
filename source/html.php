@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Text_Html
    *
-   * @package net.evalcode.components
-   * @subpackage text
+   * @api
+   * @package net.evalcode.components.text
    *
    * @author evalcode.net
    */
@@ -24,7 +24,7 @@ namespace Components;
 
 
     // CONSTRUCTION
-      public function __construct($value_, Io_Charset $charset_=null)
+    public function __construct($value_, Io_Charset $charset_=null)
     {
       if(null===$charset_)
         $charset_=Io_Charset::UTF_8();
@@ -74,22 +74,25 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Value_String::value() \Components\Value_String::value()
+    // OVERRIDES
+    /**
+     * @see \Components\Value_String::value() \Components\Value_String::value()
      */
     public function value()
     {
       return $this->m_value;
     }
 
-    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**     * @see \Components\Object::equals() \Components\Object::equals()
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -99,7 +102,8 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
@@ -122,13 +126,12 @@ namespace Components;
       'table'=>'nodeTableToPlainText',
       'tr'=>'nodeTableRowToPlainText'
     );
-
     /**
      * @var string
      */
     protected $m_value;
     /**
-     * @var Io_Charset
+     * @var \Components\Io_Charset
      */
     protected $m_charset;
     //-----
