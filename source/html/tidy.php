@@ -58,7 +58,7 @@ namespace Components;
       $this->m_tidy->diagnose();
       $errors=$this->m_tidy->errorBuffer;
 
-      $matches=array();
+      $matches=[];
       preg_match_all('/^(?:line (\d+) column (\d+) - )?(\S+): (?:\[((?:\d+\.?){4})]:)?(.*?)$/m', $errors, $matches, PREG_SET_ORDER);
     }
     //--------------------------------------------------------------------------

@@ -241,7 +241,7 @@ namespace Components;
       $columns=count($node_->child);
       $cellWidth=round($this->width/$columns, 0);
 
-      $cells=array();
+      $cells=[];
       if(isset($node_->child) && is_array($node_->child))
       {
         foreach($node_->child as $cell)
