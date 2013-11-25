@@ -45,6 +45,20 @@ namespace Components;
     {
       return new self($html_);
     }
+
+    /**
+     * @param string $html_
+     * @param \Components\Io_Charset $charset_
+     *
+     * @return \Components\Text_Html_Tidy
+     */
+    public static function tidy($html_, Io_Charset $charset_=null)
+    {
+      if(null===$charset_)
+        $charset_=Io_Charset::UTF_8();
+
+      return new Text_Html_Tidy($html_, $charset_);
+    }
     //--------------------------------------------------------------------------
 
 

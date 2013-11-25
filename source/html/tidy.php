@@ -13,8 +13,15 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Text_Html_Tidy
+  class Text_Html_Tidy implements Object, Runtime_Error_Handler
   {
+    // PREDEFINED PROPERTIES
+    const ERROR=Debug::ERROR;
+    const WARN=Debug::WARN;
+    const INFO=Debug::INFO;
+    //--------------------------------------------------------------------------
+
+
     // PROPERTIES
     public $config=array(
       'indent'=>true,
@@ -43,6 +50,9 @@ namespace Components;
 
 
     // ACCESSORS
+    /**
+     * @return \Components\Text_Html_Tidy
+     */
     public function parse()
     {
       $charset=strtolower(str_replace(array('-', '_'), null, $this->m_charset->name()));
@@ -50,21 +60,97 @@ namespace Components;
       $config=$this->config;
       $config['char-encoding']=$charset;
 
+      Runtime::pushRuntimeErrorHandler($this);
       $this->m_tidy->parseString($this->m_html, $config, $charset);
+      Runtime::popRuntimeErrorHandler($this);
+
+      return $this;
     }
 
+    /**
+     * Returns array as severity > line > column > message.
+     *
+     * @return string[]
+     */
     public function getErrors()
     {
       $this->m_tidy->diagnose();
-      $errors=$this->m_tidy->errorBuffer;
 
       $matches=[];
-      preg_match_all('/^(?:line (\d+) column (\d+) - )?(\S+): (?:\[((?:\d+\.?){4})]:)?(.*?)$/m', $errors, $matches, PREG_SET_ORDER);
+      preg_match_all('/^(?:line (\d+) column (\d+) - )?(\S+): (?:\[((?:\d+\.?){4})]:)?(.*?)$/m',
+        $this->m_tidy->errorBuffer,
+        $matches,
+        PREG_SET_ORDER
+      );
+
+      $errors=[];
+      if(false===isset($matches[0]))
+        return $errors;
+
+      foreach($matches as $match)
+      {
+        $levelTidy=strtolower(trim($match[3]));
+
+        $level=self::ERROR;
+        if(isset(self::$m_severities[$levelTidy]))
+          $level=self::$m_severities[$levelTidy];
+
+        $errors[$level][(int)$match[1]][(int)$match[2]]=$match[5];
+      }
+
+      return $errors;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    /**
+     * @see \Components\Runtime_Error_Handler::onError() onError
+     */
+    public function onError(\ErrorException $e_)
+    {
+      return true;
+    }
+
+    /**
+     * @see \Components\Object::equals() equals
+     */
+    public function equals($object_)
+    {
+      if(null===$object_)
+        return false;
+
+      return $this===$object_;
+    }
+
+    /**
+     * @see \Components\Object::hashCode() hashCode
+     */
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    /**
+     * @see \Components\Object::__toString() __toString
+     */
+    public function __toString()
+    {
+      return sprintf('%s@%s', __CLASS__, $this->hashCode());
     }
     //--------------------------------------------------------------------------
 
 
     // IMPLEMENTATION
+    /**
+     * @var string[]
+     */
+    private static $m_severities=[
+      'info'=>self::INFO,
+      'warning'=>self::WARN,
+      'error'=>self::ERROR
+    ];
+
     /**
      * @var string
      */
