@@ -74,11 +74,11 @@ namespace Components;
       $html=html_entity_decode($this->m_value, ENT_QUOTES, $this->m_charset->name());
 
       $tidy=new \tidy();
-      $tidy->parseString($html, array(
+      $tidy->parseString($html, [
         'char-encoding'=>$this->m_charset->name(),
         'input-encoding'=>$this->m_charset->name(),
         'output-encoding'=>$outputCharset_->name()
-      ));
+      ]);
 
       $string='';
       $this->nodeToPlainText($tidy->body(), $string);
@@ -88,9 +88,9 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES
+    // OVERRIDES/IMPLEMENTS
     /**
-     * @see \Components\Value_String::value() \Components\Value_String::value()
+     * @see \Components\Value_String::value() value
      */
     public function value()
     {
@@ -98,15 +98,15 @@ namespace Components;
     }
 
     /**
-     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+     * @see \Components\Object::hashCode() hashCode
      */
     public function hashCode()
     {
-      return object_hash($this);
+      return \math\hasho($this);
     }
 
     /**
-     * @see \Components\Object::equals() \Components\Object::equals()
+     * @see \Components\Object::equals() equals
      */
     public function equals($object_)
     {
@@ -117,7 +117,7 @@ namespace Components;
     }
 
     /**
-     * @see \Components\Object::__toString() \Components\Object::__toString()
+     * @see \Components\Object::__toString() __toString
      */
     public function __toString()
     {
@@ -127,7 +127,7 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    protected $m_tagConverters=array(
+    protected $m_tagConverters=[
       ''=>'nodeTextToPlainText',
       'a'=>'nodeAnchorToPlainText',
       'br'=>'nodeLinebreakToPlainText',
@@ -139,7 +139,7 @@ namespace Components;
       'p'=>'nodeParagraphToPlainText',
       'table'=>'nodeTableToPlainText',
       'tr'=>'nodeTableRowToPlainText'
-    );
+    ];
     /**
      * @var string
      */

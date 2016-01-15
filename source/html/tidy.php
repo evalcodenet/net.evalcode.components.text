@@ -23,7 +23,7 @@ namespace Components;
 
 
     // PROPERTIES
-    public $config=array(
+    public $config=[
       'indent'=>true,
       'indent-spaces'=>2,
       'wrap'=>80,
@@ -34,7 +34,9 @@ namespace Components;
       'quote-marks'=>true,
       'quote-nbsp'=>true,
       'numeric-entities'=>false
-    );
+    ];
+
+    public $ignoreProprietaryAttributes=true;
     //--------------------------------------------------------------------------
 
 
@@ -55,10 +57,11 @@ namespace Components;
      */
     public function parse()
     {
-      $charset=strtolower(str_replace(array('-', '_'), null, $this->m_charset->name()));
+      $charset=strtolower(str_replace(['-', '_'], null, $this->m_charset->name()));
 
       $config=$this->config;
       $config['char-encoding']=$charset;
+      $config['drop-proprietary-attributes']=!$this->ignoreProprietaryAttributes;
 
       Runtime::pushRuntimeErrorHandler($this);
       $this->m_tidy->parseString($this->m_html, $config, $charset);
@@ -84,11 +87,17 @@ namespace Components;
       );
 
       $errors=[];
+
       if(false===isset($matches[0]))
         return $errors;
 
       foreach($matches as $match)
       {
+        $match[5]=\str\trim(\html\strip($match[5]));
+
+        if($this->ignoreProprietaryAttributes && \str\startsWithIgnoreCase($match[5], 'proprietary attribute'))
+          continue;
+
         $levelTidy=strtolower(trim($match[3]));
 
         $level=self::ERROR;
@@ -128,7 +137,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return object_hash($this);
+      return \math\hasho($this);
     }
 
     /**
